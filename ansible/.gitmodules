@@ -1,3 +1,0 @@
-[submodule "assets/dotfiles"]
-	path = assets/dotfiles
-	url = git@gitlab.com:vsx-gl/dotfiles.git
