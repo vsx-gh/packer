@@ -1,0 +1,47 @@
+# .screenrc - Thanks to Max Lazaroff for getting me started
+# HELP: Obviously can't scroll normally within a screen session,
+# but here's how you do it:
+# 1. Enter copy mode with Ctrl-J + [
+# 2. Scroll up with Ctrl-u
+# 3. Scroll down with Ctrl-d
+# 4. Esc key to exit copy mode
+
+# Set same PS1 as regular sessions
+#PS1='[\[\e[1;31m\]\h\[\[\e[0m\]: \w]\[\e[0;32m\] \$\[\e[0m\] '
+#term urxvt-unicode-256color
+
+# Get .bash_profile settings
+shell -$SHELL
+
+# Default window title
+shelltitle 'newwindow'
+
+# No alert
+vbell off
+
+# Set a bigger scrollback than the default 100 lines
+defscrollback 100000
+
+# For PuTTY to recognize scrollback 
+termcapinfo xterm ti@:te@
+
+# No greeting
+startup_message off
+
+# Prefer ^J (usually unused) to ^A which breaks beginning of line command
+escape ^Jj 
+
+# Terminal supports UTF-8
+defutf8 on
+
+# Support alternate screens so that, for example, when you quit out of
+# vi, the display is redrawn as it was before vi redrew the full screen.
+altscreen on
+
+# Show status bar on last line of screen, regardless of terminal hardstatus support
+hardstatus alwayslastline
+
+# Display session/window names at bottom of window
+# Focus is bold red on black, unfocused is regular white on black
+#hardstatus string '%{= kw}%-Lw%{=b kR}%50>%n%f* %t%{= kw}%+Lw%< '
+hardstatus string '%{= kg}[%S] %{= kw} %-Lw%{=b kR}%50>%n%f* %t%{= kw}%+Lw%=%{= kg}[%H] %{= kw}%c'

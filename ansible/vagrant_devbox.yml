@@ -1,0 +1,10 @@
+---
+# File: vagrant_devbox.yml
+
+- name: install basic packages
+  hosts: all
+  become: yes
+  vars:
+    local_dev: jeff
+  roles:
+    - vagrant_devbox

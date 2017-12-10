@@ -1,0 +1,25 @@
+{
+    "variables": {
+    },
+
+    "builders": [{
+        "type": "amazon-ebs",
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "region": "us-east-1",
+        "source_ami": "ami-fce3c696",
+        "instance_type": "t2.micro",
+        "vpc_id": "vpc-9adb8dfc",
+        "subnet_id": "subnet-d16117b4",
+        "security_group_ids": ["sg-f6ba6c89"],
+        "ssh_username": "ubuntu",
+        "ami_name": "WRDS_Ubuntu_Base_AMI"
+    }],
+
+    "provisioners": [{
+        "type": "shell",
+        "script": "provision.sh"
+    }],
+
+    "post-processors": ["vagrant"]
+}

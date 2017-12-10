@@ -1,0 +1,11 @@
+---
+# vars file for python3
+
+pip_pkgs:
+  - boto3
+  - awscli
+  - zerorpc
+  - jupyter
+  - plotly
+  - setuptools
+  - geoplotlib

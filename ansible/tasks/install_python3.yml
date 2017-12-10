@@ -1,0 +1,104 @@
+---
+# File: install_python3.yml
+    - name: install python3 dependencies - RedHat
+      yum:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - zlib-devel
+        - bzip2-devel
+        - openssl-devel
+        - ncurses-devel
+        - sqlite-devel
+        - readline-devel
+        - tk-devel
+        - gdbm-devel
+        - db4-devel
+        - libpcap-devel
+        - xz-devel
+        - wget
+        - git
+      when: ansible_os_family == "RedHat"
+
+    - name: install python3 dependencies - Debian
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - zlib1g-dev
+        - libbz2-dev
+        - libssl-dev
+        - libncurses5-dev
+        - libsqlite0-dev
+        - libsqlite3-dev
+        - libreadline-dev
+        - tk-dev
+        - libgdbm-dev
+        - libpcap-dev
+        - liblzma-dev
+        - wget
+        - git
+      when: ansible_os_family == "Debian"
+
+    - name: fetch python3 binary
+      get_url:
+        url: https://www.python.org/ftp/python/{{ py_ver }}/Python-{{ py_ver }}.tgz
+        dest: /tmp/Python-{{ py_ver }}.tgz
+        checksum: md5:2d0fc9f3a5940707590e07f03ecb08b9
+
+    - name: extract python3 binary
+      unarchive:
+        src: /tmp/Python-{{ py_ver }}.tgz
+        dest: /tmp
+        remote_src: True
+
+    - name: configure python3 source
+      shell:
+        ./configure --prefix=/usr/local --with-sqlite
+        chdir=/tmp/Python-{{ py_ver }}
+
+    - name: build python3 binary
+      shell:
+        make
+        chdir=/tmp/Python-{{ py_ver }}
+
+    - name: install python3 binary
+      shell:
+        make altinstall
+        chdir=/tmp/Python-{{ py_ver }}
+
+    - name: create py3 symlink
+      file:
+        src: /usr/local/bin/python{{ py_ver_short }} 
+        dest: /usr/local/bin/python3
+        state: link
+
+    - name: create pip symlink
+      file:
+        src: /usr/local/bin/pip{{ py_ver_short }} 
+        dest: /usr/local/bin/pip
+        state: link
+
+    - name: install pip packages
+      pip:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - virtualenv
+        - plotly
+        - pandas
+        - numpy
+        - matplotlib
+        - Sphinx
+
+    - name: clean up installers
+      file:
+        path: /tmp/Python-{{ py_ver }}.tgz
+        state: absent
+
+    - name: clean up unzipped tarball
+      file:
+        path: /tmp/Python-{{ py_ver }}
+        state: absent

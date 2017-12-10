@@ -1,0 +1,102 @@
+---
+# File: main.yml - tasks file for vagrant_devbox
+  - group:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - "{{ local_dev }}"
+
+  - user:
+      name: "{{ local_dev }}"
+      group: "{{ local_dev }}"
+      append: no
+      shell: /bin/bash
+      createhome: yes
+      uid: 1010
+      state: present
+
+  - file:
+      path: "/home/{{ local_dev }}/.ssh"
+      state: directory
+      owner: "{{ local_dev }}"
+      group: "{{ local_dev }}"
+      mode: 0700
+
+  - shell: |
+      echo "%{{ local_dev }}    ALL=(ALL)       NOPASSWD: ALL" > "/etc/sudoers.d/{{ local_dev }}"
+
+  - name: copy SSH authorized public key to local dev user
+    copy:
+      src: ../../../assets/ssh/vagrant_rsa_authkeys
+      dest: "/home/{{ local_dev }}/.ssh/authorized_keys"
+      owner: "{{ local_dev }}"
+      group: "{{ local_dev }}"
+      mode: 0600
+
+  - name: copy useful dotfiles
+    copy:
+      src: "../../../assets/dotfiles/{{ item }}"
+      dest: "/home/{{ local_dev }}/{{ item }}"
+      owner: "{{ local_dev }}"
+      group: "{{ local_dev }}"
+      mode: 0600
+    with_items:
+      - .bash_profile
+      - .bashrc
+      - .screenrc
+      - .tmux.conf
+
+  - name: install Development Tools package
+    yum:
+      name: "@Development Tools"
+      state: present
+
+  - name: install system essentials
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - epel-release
+      - wget
+      - curl
+      - screen
+      - tmux
+      - net-tools
+      - zlib-devel
+      - bzip2
+      - bzip2-devel
+      - readline-devel
+      - sqlite
+      - sqlite-devel
+      - openssl-devel
+      - xz
+      - xz-devel
+
+  - name: install pyenv
+    git:
+      repo: https://github.com/pyenv/pyenv.git
+      dest: "/home/{{ local_dev }}/.pyenv"
+
+  - name: install pyenv-virtualenv
+    git:
+      repo: https://github.com/pyenv/pyenv-virtualenv.git
+      dest: "/home/{{ local_dev }}/.pyenv/plugins/pyenv-virtualenv"
+
+  - name: change pyenv perms
+    file:
+      path: "/home/{{ local_dev }}/.pyenv"
+      state: directory
+      owner: "{{ local_dev }}"
+      group: "{{ local_dev }}"
+      recurse: yes
+
+  - name: install NTP
+    yum:
+      name: ntp
+      state: present
+
+  - name: start NTP service
+    service: 
+      name: ntpd
+      state: started
+      enabled: yes
