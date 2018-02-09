@@ -9,11 +9,11 @@ Vagrant.configure("2") do |config|
 		p.customize ["modifyvm", :id, "--cpus", 2]
 		p.customize ["modifyvm", :id, "--cpuexecutioncap", 50]
 	end
-    config.ssh.private_key_path = "~/.ssh/vagrant_rsa"
+    config.ssh.private_key_path = ENV['HOME'] + "/.ssh/vagrant_rsa"
     config.ssh.username = "vagrant"
 	config.vm.hostname = "centos7-devbox0000"
 	config.vm.provision "ansible" do |ansible|
-		ansible.playbook = "/home/jeff/dev/packer/ansible/vagrant_devbox.yml"
+		ansible.playbook = ENV['HOME'] + "/dev/packer/ansible/vagrant_devbox.yml"
 		ansible.host_key_checking = false
 		ansible.raw_ssh_args = '-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PasswordAuthentication=no'
 	end
