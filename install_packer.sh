@@ -30,8 +30,8 @@ packer_ver="$1"
 sys_arch=$(uname -s | tr '[[:upper:]]' '[[:lower:]]')
 
 # Check if Packer installed
-if [ -f /usr/local/bin/packer ]; then
-  packer_installed_ver=$(/usr/local/bin/packer --version)
+if [ -f $HOME/.local/bin/packer ]; then
+  packer_installed_ver=$($HOME/.local/bin/packer --version)
   echo -n "Packer already installed and/or newer than $packer_ver. Want to replace? (Y/N): "
   read replace_ver
   replace_ver=$(echo "$replace_ver" | tr '[[:lower:]]' '[[:upper:]]')
@@ -110,13 +110,13 @@ sleep 3
 
 # Unzip to /usr/local/bin
 echo -e "Placing Packer binary into execution path....\n"
-sudo unzip -d /usr/local/bin /tmp/packer_"$packer_ver"_"$sys_arch"_amd64.zip
+unzip -d $HOME/.local/bin /tmp/packer_"$packer_ver"_"$sys_arch"_amd64.zip
 
 sleep 3
 
 # Test packer to make sure it works
 echo -e "Running Packer to make sure it works....\n"
-/usr/local/bin/packer
+$HOME/.local/bin/packer
 
 # Clean up files if haven't already by early exits
 clean_tmp
