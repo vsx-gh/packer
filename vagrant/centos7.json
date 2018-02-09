@@ -6,8 +6,13 @@
       "checksum_type": "",
       "ssh_user": "",
       "ssh_pass": "",
+      "ansible_ssh_user": "",
+      "ansible_ssh_key": "",
       "output_vm_name": "",
-      "guest_add_path": ""
+      "guest_add_path": "",
+      "ansible_playbook": "",
+      "home": "{{env `HOME`}}/.ssh",
+      "local_dev": ""
       },
     "builders": [
       {
@@ -40,8 +45,11 @@
     ],
     "provisioners": [
       {
-        "scripts": ["root_setup.sh"],
-        "type": "shell"
+        "type": "ansible",
+        "playbook_file": "{{user `ansible_playbook`}}",
+        "user": "{{user `ansible_ssh_user`}}",
+        "ssh_authorized_key_file": "{{user `home`}}/{{user `ansible_ssh_key`}}",
+        "extra_arguments": ["--extra-vars", "local_dev={{user `local_dev`}}"]
       }
     ],
     "post-processors": [

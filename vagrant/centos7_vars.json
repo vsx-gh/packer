@@ -1,10 +1,14 @@
 {
   "os_type": "RedHat_64",
-  "os_iso": "/home/jeff/dev/packer/resources/CentOS-7-x86_64-Minimal-1708.iso",
+  "os_iso": "../resources/CentOS-7-x86_64-Minimal-1708.iso",
   "os_checksum": "bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5",
   "checksum_type": "sha256",
   "ssh_user": "vagrant",
   "ssh_pass": "vagrant",
   "output_vm_name": "CentOS_7_Base",
-  "vm_memory_mb": "2048"
+  "vm_memory_mb": "2048",
+  "ansible_ssh_user": "vagrant",
+  "ansible_ssh_key": "vagrant_rsa.pub",
+  "ansible_playbook": "../ansible/img_common.yml",
+  "local_dev": "jeff"
 }
