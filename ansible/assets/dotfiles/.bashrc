@@ -4,8 +4,7 @@
 #	. /etc/bashrc
 #fi
 
-#PS1='[\[\e[1;31m\]\h\[\[\e[0m\]: \w]\[\e[0;32m\]\$\[\e[0m\] '
-PS1='[\[\e[1;34m\]\h\[\[\e[0m\]: \w]\[\e[0;32m\]\$\[\e[0m\] '
+PS1='[\[\e[1;34m\]\h\[\e[0m\]: \w]\[\e[0;32m\]\$\[\e[0m\] '
 HISTCONTROL=ignoreboth
 HISTFILESIZE=10000
 
