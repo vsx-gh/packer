@@ -46,7 +46,7 @@
       get_url:
         url: https://www.python.org/ftp/python/{{ py_ver }}/Python-{{ py_ver }}.tgz
         dest: /tmp/Python-{{ py_ver }}.tgz
-        checksum: md5:{{ py_md5 }}
+        checksum: md5:2d0fc9f3a5940707590e07f03ecb08b9
 
     - name: extract python3 binary
       unarchive:
@@ -55,20 +55,19 @@
         remote_src: True
 
     - name: configure python3 source
-      command: ./configure --prefix=/usr/local --with-sqlite
-      args:
-        chdir: /tmp/Python-{{ py_ver }}
+      shell:
+        ./configure --prefix=/usr/local --with-sqlite
+        chdir=/tmp/Python-{{ py_ver }}
 
     - name: build python3 binary
-      command: make
-      args:
-        chdir: /tmp/Python-{{ py_ver }}
+      shell:
+        make
+        chdir=/tmp/Python-{{ py_ver }}
 
     - name: install python3 binary
-      command: make altinstall
-      args:
-        chdir: /tmp/Python-{{ py_ver }}
-        creates: /usr/local/bin/python{{ py_ver }}
+      shell:
+        make altinstall
+        chdir=/tmp/Python-{{ py_ver }}
 
     - name: create py3 symlink
       file:
@@ -84,11 +83,15 @@
 
     - name: install pip packages
       pip:
-        executable: /usr/local/bin/pip{{ py_ver_short}}
         name: "{{ item }}"
         state: present
       with_items:
-      - "{{ pip_pkgs }}"
+        - virtualenv
+        - plotly
+        - pandas
+        - numpy
+        - matplotlib
+        - Sphinx
 
     - name: clean up installers
       file:
