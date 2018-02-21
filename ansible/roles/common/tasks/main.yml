@@ -1,0 +1,41 @@
+---
+# tasks file for common
+  - name: install basic packages
+    yum:
+      update_cache: yes
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - "@Base"
+      - "@Development Tools"
+      - screen
+      - kernel-headers
+      - epel-release
+      - tmux
+      - vim
+      - deltarpm
+      - nfs-utils
+      - wget
+      - sqlite-devel
+      - zlib-devel
+      - gcc
+      - xz-devel
+      - readline-devel
+      - bzip2-devel
+      - openssl-devel
+      - net-tools
+      - rsync
+      - kernel-devel
+      - bzip2
+      - bind-utils
+  - name: clean yum
+    command: yum clean all
+  - name: place motd
+    copy:
+      src: ../../../assets/etc/eyes.motd
+      dest: /etc/motd
+      owner: root
+      group: root
+      mode: 0644
+
+# vim:syntax=yaml
