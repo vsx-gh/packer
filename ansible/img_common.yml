@@ -1,0 +1,14 @@
+---
+# File: img_common.yml
+
+- name: install basic packages
+  hosts: all
+  become: yes
+  vars:
+    - "local_dev": ""
+    - "local_dev_ssh_pubkey": ""
+    - "ansiblizer_ssh_pubkey": ""
+  roles:
+    - common
+    - ansiblizer
+    - devbox 
