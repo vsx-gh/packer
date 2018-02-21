@@ -1,0 +1,58 @@
+{
+    "variables": {
+        "centos7_ami": "",
+        "inst_type": "",
+        "region": "",
+        "vpc": "",
+        "subnet": "",
+        "sec_grps": "",
+        "this_ami_name": "",
+        "prov_script": "",
+        "create_time": "",
+        "creator": "",
+        "img_pubkey": "",
+        "ansible_remote_user": "",
+        "ansible_ssh_pubkey": "",
+        "ansible_extra_args": ""
+    },
+
+    "builders": [{
+        "type": "amazon-ebs",
+        "communicator": "ssh",
+        "ssh_pty": true,
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "region": "{{user `region`}}",
+        "source_ami": "{{user `centos7_ami`}}",
+        "instance_type": "{{user `inst_type`}}",
+        "vpc_id": "{{user `vpc`}}",
+        "subnet_id": "{{user `subnet`}}",
+        "security_group_ids": ["{{user `sec_grps`}}"],
+        "ssh_username": "centos",
+        "ami_name": "{{user `this_ami_name`}}_{{user `create_time`}}",
+        "tags": {
+            "Name": "{{user `this_ami_name`}}_{{user `create_time`}}",
+            "Created": "{{user `create_time`}}",
+            "Creator": "{{user `creator`}}"
+        }
+    }],
+
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "{{user `img_pubkey`}}",
+            "destination": "/home/{{user `ansible_remote_user`}}/.ssh/authorized_keys"
+        },
+        {
+            "type": "shell",
+            "inline": ["chmod 0600 /home/{{user `ansible_remote_user`}}/.ssh/authorized_keys"]
+        },
+        {
+            "type": "ansible",
+            "playbook_file": "../ansible/img_common.yml",
+            "user": "{{user `ansible_remote_user`}}",
+            "ssh_authorized_key_file": "{{user `ansible_ssh_pubkey`}}",
+            "extra_arguments": ["--extra-vars", "{{user `ansible_extra_args`}}"]
+        }
+    ]
+}

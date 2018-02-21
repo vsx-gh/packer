@@ -1,0 +1,15 @@
+{
+    "centos7_ami": "ami-a042f4d8",
+    "inst_type": "t2.micro",
+    "region": "us-west-2",
+    "vpc": "vpc-2555ef5c",
+    "subnet": "subnet-cf5d4287",
+    "sec_grps": "sg-4b6cc534",
+    "this_ami_name": "SickleTech-CentOS7_Base",
+    "prov_script": "centos7_provision.sh",
+    "img_pubkey": "/home/jeff/.ssh/ec2_ssh.pub",
+    "ansible_remote_user": "centos",
+    "ansible_ssh_pubkey": "/home/jeff/.ssh/ec2_ssh.pub",
+    "ansible_extra_args": "local_dev=jeff ansiblizer_ssh_pubkey=/home/jeff/.ssh/ansiblizer_rsa.pub local_dev_ssh_pubkey=/home/jeff/.ssh/id_rsa.pub",
+    "create_time": "20180220213000"
+}
