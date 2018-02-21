@@ -1,0 +1,37 @@
+---
+# tasks file for ansiblizer
+
+  - name: create ansiblizer user group
+    group:
+      name: ansiblizer
+      state: present
+  - name: create ansiblizer user
+    user:
+      name: ansiblizer
+      groups: ansiblizer,adm,wheel,systemd-journal
+      append: no
+      shell: /bin/bash
+      createhome: yes
+      uid: 1005
+      state: present
+  - file:
+      path: "/home/ansiblizer/.ssh"
+      state: directory
+      owner: ansiblizer
+      group: ansiblizer 
+      mode: 0700
+  - name: copy SSH authorized public key to local dev user
+    copy:
+      src: "{{ ansiblizer_ssh_pubkey }}"
+      dest: "/home/ansiblizer/.ssh/authorized_keys"
+      owner: ansiblizer
+      group: ansiblizer
+      mode: 0600
+  - copy:
+      src: ../../../assets/etc/sudoers.d/ansiblizer
+      dest: /etc/sudoers.d/ansiblizer
+      owner: root
+      group: root
+      mode: 0640
+
+# vim:syntax=yaml
