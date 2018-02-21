@@ -1,5 +1,7 @@
 *.tfstate
+*.tfstate.backup
 *.box
 *.iso
 *.swp
 *.retry
+packer_cache/
